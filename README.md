@@ -1,5 +1,8 @@
 # college-util
 
 ### update
-- [x] Admin can manage user role and status
-- [ ] Admin ui design 
+- [x] Login / Signup
+- [x] Route handling 
+- [x] Admin can manage user role and status 
+- [ ] Admin dashboard 
+- [ ] Member dashboard
