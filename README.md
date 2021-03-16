@@ -1,4 +1,5 @@
 # college-util
 
 ### update
-Now admin can manage user role and status
+-[x] Admin can manage user role and status
+-[ ] Admin ui design 
