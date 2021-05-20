@@ -19,6 +19,9 @@ import AuthContextProvider, { AuthContext } from './context/AuthContext';
 import LoginScreen from './screens/LoginScreen';
 import SignupScreen from './screens/SignupScreen';
 import AdminDashboard from './screens/AdminDashboard';
+import UserDashboard from './screens/UserDashboard';
+import UserUpload from './components/UserApp'
+import UserFilesList from './components/UserFilesList'
 import Image404 from './resources/page_not_found.svg';
 
 
@@ -69,18 +72,24 @@ function App() {
             component={<AdminDashboard/>}
           />
 
-          {/* <Route path="/user/dashboard">
-            <div> User dashboard here</div>
-          </Route> */}
           <ProtectedRoutes
+            exact
             path="/user/dashboard"
-            component={(<div>user dashboard <ul><li>check for admin or normal user</li></ul></div>)}
+            component={<UserDashboard/>}
+          />
+          <ProtectedRoutes
+            path="/user/dashboard/upload"
+            component={<UserUpload/>}
+          />
+          <ProtectedRoutes
+            path="/user/dashboard/show_files"
+            component={<UserFilesList/>}
           />
 
           <ProtectedRoutes
             exact
             path="/"
-            component={(<div>Home Page</div>)}
+            component={ <Redirect to="/log-in" />}
           />
           
           {/* if no match */}

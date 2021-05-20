@@ -9,6 +9,7 @@ const DataBase    = require('../db/database');
 //app setting for form data
 routes.get('/userList', async (req, res)=>{
     try{
+        console.log(req.user);
         let user = req.user;
 
         await delay(1500);

@@ -1,6 +1,15 @@
 const express       = require('express');
+const path      = require('path');
 const cors          = require('cors');
 const session       = require('express-session');
+
+const passport      = require('passport');
+const User          = require('./db/User');
+const setStrategy   = require('./auth/pass_setup');
+const fileRoute     = require('./routes/file');
+
+ //database connection
+ require('./db/connection')();
 
 //GLOBAL FUction FOR DELAY (SIMULATE REAL NETWORK FETCH)
 global.delay = (delay_time)=>{return new Promise(resolve=>setTimeout(resolve, delay_time));}
@@ -45,9 +54,6 @@ app.use(
 
 //configure passport
 //use express session before passport session
-const passport      = require('passport');
-const User          = require('./db/User');
-const setStrategy   = require('./auth/pass_setup');
 
 setStrategy(passport, User);
 app.use(passport.initialize());
@@ -105,6 +111,12 @@ app.use('/log-in', require('./routes/log-in-routes'));
 
 app.use('/cms', require('./routes/cms-routes'));
 
+app.use(fileRoute);
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'build', 'index.html'));
+});
+
 
 
 const PORT = process.env.PORT || 5000;
@@ -112,6 +124,5 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, ()=>{
     console.log('Application is running at port ' + PORT);
     
-    //database connection
-    require('./db/connection')();
+   
 });

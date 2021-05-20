@@ -58,7 +58,7 @@ export default function AuthContextProvider (props) {
     function silentRefresh(){
         if(user){
          axios.post('http://localhost:5000/refresh-token', {}, {withCredentials: true})
-         .then(res=>{console.log(res)
+         .then(res=>{
              if(res.data){
                  if(res.data.response_status === 1000 || res.data.response_status === 1001)
                      setActive(res.data.isActive || false);
