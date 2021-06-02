@@ -6,7 +6,6 @@
 
 body {
   letter-spacing: 1px;
-  padding: 20px;
 }
 h1 {
   text-align: center;
@@ -16,7 +15,6 @@ h1 {
 h1{
   margin-bottom: 20px;
 }
-
 
 .errorMsg {
   color: #f21e08;
@@ -44,7 +42,7 @@ h1{
   margin-bottom: 10px;
   padding: 40px 10px;
   height: inherit;
-  border: 2px dashed #e9ebeb;
+  border: 2px dashed #6a696d;
   display: flex;
   flex-direction: column;
   justify-content: center;

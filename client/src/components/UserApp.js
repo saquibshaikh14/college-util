@@ -1,12 +1,12 @@
 import React, { useState, useRef } from 'react';
 import Dropzone from 'react-dropzone';
 import axios from 'axios';
-import { Form, Row, Col, Button,Nav} from 'react-bootstrap';
+import { Form, Row, Col, Button, Nav} from 'react-bootstrap';
 import { API_URL } from '../utils/constants';
 import './stylesheet/UserApp.css';
-import Header from './UserHeader'
+import History from '../utils/history';
 
-const App = (props) => {
+const App = () => {
   const [file, setFile] = useState(null); // state for storing actual image
   const [previewSrc, setPreviewSrc] = useState(''); // state for storing previewImage
   const [state, setState] = useState({
@@ -65,8 +65,8 @@ const App = (props) => {
             headers: {
               'Content-Type': 'multipart/form-data'
             }
-          })
-          props.history.push('/user/dashboard/show_files');
+          });
+          History.push('/user/dashboard/show_files');
         } else {
           setErrorMsg('Please select a file to add.');
         }
@@ -80,7 +80,23 @@ const App = (props) => {
 
   return (
     <>
-      <Header/>
+      <div>
+          <div className="header">
+            <h1>File Upload And Download</h1>
+            <Nav variant="pills" defaultActiveKey="/user/dashboard">
+              <Nav.Item>
+                <Nav.Link href="/user/dashboard" exact={true}>
+                  Home
+                </Nav.Link>
+              </Nav.Item>
+              <Nav.Item>
+                <Nav.Link href="/user/dashboard/show_files">
+                   Files List
+                </Nav.Link>
+              </Nav.Item>
+            </Nav>
+          </div>
+        </div>
 
       <Form className="search-form" onSubmit={handleOnSubmit}>
         {errorMsg && <p className="errorMsg">{errorMsg}</p>}

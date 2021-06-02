@@ -1,52 +1,39 @@
 import React from 'react';
 import {Icon} from 'semantic-ui-react';
-import {Link, useHistory} from 'react-router-dom';
+import { Link} from "react-router-dom";
 
-export default function Sidebar({activeNav, baseUrl}) {
-    activeNav = activeNav?activeNav:"home";
 
-        let history = useHistory();
-      
-        const redirect = () => {
-          history.push('/user/dashboard/upload')
-        }
-        const redirectShowFile = () => {
-            history.push('/user/dashboard/show_files')
-          }
-    
+export default function UserSidebar({activeNav, baseUrl}) {
+  activeNav = activeNav?activeNav:"home";
     return (
-        <div className="sidebar">
-            <h3 className="sidebar-logo">STCET</h3>
+          <div className="sidebar">
+          <h3 className="sidebar-logo">STCET</h3>
             <ul className="sidebar-navigations">
-                <li className={"sidebar-nav-item" + (activeNav && activeNav==="home"? " side-nav-active":"")}>
-                    {/* <button className="ui fluid button sidebar-nav-button">Some text</button> */}
-                    <Link to={"/" + baseUrl + "/dashboard"} className="sidebar-nav-link">
-                        <Icon name="dashboard" />
-                        Dashboard
-                    </Link>
-                </li>
-                <li className="sidebar-nav-title">
+              <li  className={"sidebar-nav-item" + (activeNav && activeNav==="home"? " side-nav-active":"")}>
+                <Link to={"/" + baseUrl + "/dashboard"} className="sidebar-nav-link">
+                <Icon name="dashboard" />
+                  Dashboard
+                </Link>
+              </li>
+              <li className="sidebar-nav-title">
                     Menu
-                </li>
+              </li>
 
-                <li className={"sidebar-nav-item "} name="show_files">
-                    {/* <button className="ui fluid button sidebar-nav-button">Some text</button> */}
-                    <div role="button" className="sidebar-nav-link" onClick={redirectShowFile}>
-                        <Icon name="file" />
-                        Show Files
-                    </div>
-                </li>
-                <li className={"sidebar-nav-item "} name="upload">
-                    {/* <button className="ui fluid button sidebar-nav-button">Some text</button> */}
-                    <div role="button" className="sidebar-nav-link" onClick={redirect}>
-                        <Icon name="upload" />
-                        Upload documents
-                    </div>
-                </li>
-                
-                <li className="sidebar-nav-divider"></li>
+              <li className={"sidebar-nav-item "} name="show_files">
+                <Link to={"/" + baseUrl + "/dashboard/show_files"} className="sidebar-nav-link">
+                  <Icon name="file" />
+                  Show_Files
+                </Link>
+              </li>
+              <li className={"sidebar-nav-item "} name="upload">
+                <Link to={"/" + baseUrl + "/dashboard/upload"} className="sidebar-nav-link">
+                 <Icon name="upload" />
+                  Upload
+                </Link>
+              </li>
+              <li className="sidebar-nav-divider"></li>
             </ul>
-        </div>
-      
-    )
-}
+          </div>
+
+    );
+  }

@@ -81,7 +81,7 @@ export default function SignupScreen() {
   const handleChange = (e) =>{
     if(e.target.name === 'email'){
 
-      let regex = /^[^\s@]+@[^\s@\.]+\.[^\s@]+$/gi;
+      let regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/gi;
       
       regex.test(e.target.value)
         ?setFormError({...formError, email: null})

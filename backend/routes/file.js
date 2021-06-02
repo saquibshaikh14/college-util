@@ -3,6 +3,7 @@ const express = require('express');
 const multer = require('multer');
 const File = require('../db/file');
 const Router = express.Router();
+const fs =require('fs');
 
 const upload = multer({
     storage: multer.diskStorage({
@@ -45,6 +46,7 @@ const upload = multer({
         await file.save();
         res.send('file uploaded successfully.');
         console.log('file uploaded');
+        
       } catch (error) {
         res.status(400).send('Error while uploading file. Try again later.');
       }
@@ -74,10 +76,27 @@ Router.get('/download/:id', async (req, res) => {
     res.set({
       'Content-Type': file.file_mimetype
     });
+    //console.log(path.join(__dirname, '..', file.file_path))
     res.sendFile(path.join(__dirname, '..', file.file_path));
   } catch (error) {
     res.status(400).send('Error while downloading file. Try again later.');
   }
 });
 
+Router.delete("/delete/:id",upload.single("file"), function(req, res) {
+  File.findByIdAndRemove(req.params.id, function(err,res) {
+    if(err) {
+      res.status(400).send('Error while deleting file. Try again later.');
+    } else {
+      //console.log(res.file_path);
+      fs.unlink(path.join(__dirname, '..', res.file_path), (err) => {
+        if (err) {
+            console.log("failed to delete local image:");
+        } else {
+            console.log('successfully deleted local image');                                
+        }
+    });
+    }
+  });
+});
 module.exports = Router;

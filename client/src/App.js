@@ -4,13 +4,15 @@ import './admin.css';
 
 import {useContext, useEffect} from 'react';
 
+import { Router } from 'react-router';
 import {
-  BrowserRouter as Router,
   Switch,
   Route,
   Redirect,
   Link
 } from 'react-router-dom';
+import history from './utils/history';
+
 import {Message} from 'semantic-ui-react';
 
 import AuthContextProvider, { AuthContext } from './context/AuthContext';
@@ -20,8 +22,6 @@ import LoginScreen from './screens/LoginScreen';
 import SignupScreen from './screens/SignupScreen';
 import AdminDashboard from './screens/AdminDashboard';
 import UserDashboard from './screens/UserDashboard';
-import UserUpload from './components/UserApp'
-import UserFilesList from './components/UserFilesList'
 import Image404 from './resources/page_not_found.svg';
 
 
@@ -53,7 +53,7 @@ function App() {
   return (
 
     <AuthContextProvider>
-      <Router>
+      <Router history={history}>
         <Switch>
           <Route exact path="/log-in">
             <LoginScreen />
@@ -62,10 +62,6 @@ function App() {
           <Route exact path="/sign-up" >
             <SignupScreen/>
           </Route>  
-          
-          {/* <Route path="/admin/dashboard">
-            <AdminDashboard />
-          </Route> */}
 
           <ProtectedRoutes
             path="/admin/dashboard"
@@ -73,17 +69,8 @@ function App() {
           />
 
           <ProtectedRoutes
-            exact
             path="/user/dashboard"
             component={<UserDashboard/>}
-          />
-          <ProtectedRoutes
-            path="/user/dashboard/upload"
-            component={<UserUpload/>}
-          />
-          <ProtectedRoutes
-            path="/user/dashboard/show_files"
-            component={<UserFilesList/>}
           />
 
           <ProtectedRoutes
