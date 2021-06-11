@@ -12,7 +12,7 @@ const UserFilesList = () => {
   useEffect(() => {
     const getFilesList = async () => {
       try {
-        const { data } = await axios.get(`${API_URL}/getAllFiles`);
+        const { data } = await axios.get(`${API_URL}/getAllFiles`,{withCredentials: true});
         setErrorMsg('');
         setFilesList(data);
       } catch (error) {
@@ -20,32 +20,21 @@ const UserFilesList = () => {
       }
     };
     getFilesList();
-  },[filesList]);
+  },[]);
 
-// const deleteFile = async (id, path) => {
-//   try {
-//     const result = await axios.delete(`${API_URL}/delete/${id}`);
-//     setErrorMsg('');
-//     return delete(result.data, path);
-//   } catch (error) {
-//     if (error.response && error.response.status === 400) {
-//       setErrorMsg('Error while deleting file. Try again later');
-//     }
-//   }
-// };
 const deleteFile = async (id,path) =>{
   //console.log(typeof id)
   let url=`${API_URL}/delete/${id}`;
-  await axios.delete(url)
+  await axios.delete(url,{withCredentials: true})
   .then(res=>{
-    setFilesList(filesList.filter(file => id !== file.id))
+    //console.log(res)
+    setFilesList(filesList.filter(file => id !== file.id));
     setErrorMsg('');
   })
 };
-
   const downloadFile = async (id, path, mimetype) => {
     try {
-      const result = await axios.get(`${API_URL}/download/${id}`, {
+      const result = await axios.get(`${API_URL}/download/${id}`,{withCredentials: true}, {
         responseType: 'blob'
       });
       const split = path.split('/');

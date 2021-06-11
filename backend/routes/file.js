@@ -5,6 +5,7 @@ const File = require('../db/file');
 const Router = express.Router();
 const fs =require('fs');
 
+
 const upload = multer({
     storage: multer.diskStorage({
       destination(req, file, cb) {
@@ -33,20 +34,21 @@ const upload = multer({
     '/upload',
     upload.single('file'),
     async (req, res) => {
-        //console.log(req);
       try {
+        console.log(req);
         const { title, description } = req.body;
         const { path, mimetype } = req.file;
         const file = new File({
           title,
           description,
           file_path: path,
-          file_mimetype: mimetype
+          file_mimetype: mimetype,
+          //uploadedBy: req.user,
         });
         await file.save();
         res.send('file uploaded successfully.');
         console.log('file uploaded');
-        
+               
       } catch (error) {
         res.status(400).send('Error while uploading file. Try again later.');
       }
@@ -60,6 +62,7 @@ const upload = multer({
 
 Router.get('/getAllFiles', async (req, res) => {
   try {
+    console.log(req.user);
     const files = await File.find({});
     const sortedByCreationDate = files.sort(
       (a, b) => b.createdAt - a.createdAt
@@ -83,7 +86,7 @@ Router.get('/download/:id', async (req, res) => {
   }
 });
 
-Router.delete("/delete/:id",upload.single("file"), function(req, res) {
+Router.delete("/delete/:id", function(req, res) {
   File.findByIdAndRemove(req.params.id, function(err,res) {
     if(err) {
       res.status(400).send('Error while deleting file. Try again later.');

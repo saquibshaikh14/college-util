@@ -69,8 +69,7 @@ export default function UserDashboard() {
                             <div role="button" className="header-dropdown-toggle">
                                 <div className="header-avatar-div">
                                    <img src={user.profile?"http://localhost:5000/"+user.profile:'https://i.pravatar.cc/50'} alt="user" className="header-avatar" /> 
-                                </div>
-                                
+                                </div>   
                             </div>
                             <div className="header-dropdwon-menu">
                                 <div role="button" className="header-dropdown-item">

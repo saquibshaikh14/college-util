@@ -55,7 +55,7 @@ const App = () => {
       if (title.trim() !== '' && description.trim() !== '') {
         if (file) {
           const formData = new FormData();
-          console.log(formData)
+          //console.log(formData)
           formData.append('file', file);
           formData.append('title', title);
           formData.append('description', description);
@@ -65,7 +65,7 @@ const App = () => {
             headers: {
               'Content-Type': 'multipart/form-data'
             }
-          });
+          },{withCredentials: true});
           History.push('/user/dashboard/show_files');
         } else {
           setErrorMsg('Please select a file to add.');

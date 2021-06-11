@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-
+const { ObjectId } = mongoose.Schema.Types;
 const fileSchema = mongoose.Schema(
   {
     title: {
@@ -19,7 +19,11 @@ const fileSchema = mongoose.Schema(
     file_mimetype: {
       type: String,
       required: true
-    }
+    },
+    // uploadedBy:{
+    //   type: ObjectId,
+    //   ref: "users",
+    // }
   },
   {
     timestamps: true
