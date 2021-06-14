@@ -1,21 +1,37 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useContext } from 'react';
 import Dropzone from 'react-dropzone';
 import axios from 'axios';
-import { Form, Row, Col, Button, Nav} from 'react-bootstrap';
+import { Form, Row, Col, Button} from 'react-bootstrap';
 import { API_URL } from '../utils/constants';
 import './stylesheet/UserApp.css';
 import History from '../utils/history';
+import { AuthContext } from '../context/AuthContext';
 
-const App = () => {
+const App = (props) => {
+  const { user} = useContext(AuthContext);
+
   const [file, setFile] = useState(null); // state for storing actual image
   const [previewSrc, setPreviewSrc] = useState(''); // state for storing previewImage
   const [state, setState] = useState({
     title: '',
-    description: ''
+    description: '',
+    uploadedUnder: '',
   });
   const [errorMsg, setErrorMsg] = useState('');
   const [isPreviewAvailable, setIsPreviewAvailable] = useState(false); // state to show preview only for images
   const dropRef = useRef(); // React ref for managing the hover state of droppable area
+
+  const CaptionContent=()=>{
+    return(
+      <h3 style={{
+        textAlign: 'center',
+        color: 'blue',
+        padding: '0.5em' 
+      }}>
+       File Upload and Download 
+      </h3>
+    )
+  } 
 
   const handleInputChange = (event) => {
     setState({
@@ -50,22 +66,24 @@ const App = () => {
 
     try {
       //console.log(state);
-      //console.log(file)
-      const { title, description } = state;
-      if (title.trim() !== '' && description.trim() !== '') {
+      
+      const { title, description,uploadedUnder } = state;
+      if (title.trim() !== '' && description.trim() !== '' && uploadedUnder !=='') {
         if (file) {
           const formData = new FormData();
           //console.log(formData)
           formData.append('file', file);
           formData.append('title', title);
           formData.append('description', description);
+          formData.append('uploadedUnder', uploadedUnder);
 
           setErrorMsg('');
           await axios.post(`${API_URL}/upload`, formData, {
             headers: {
               'Content-Type': 'multipart/form-data'
-            }
-          },{withCredentials: true});
+            },
+            withCredentials: true
+          });
           History.push('/user/dashboard/show_files');
         } else {
           setErrorMsg('Please select a file to add.');
@@ -78,10 +96,12 @@ const App = () => {
     }
   };
 
+  
+
   return (
     <>
-      <div>
-          <div className="header">
+      <CaptionContent/>
+      {/* <div className="header">
             <h1>File Upload And Download</h1>
             <Nav variant="pills" defaultActiveKey="/user/dashboard">
               <Nav.Item>
@@ -95,9 +115,10 @@ const App = () => {
                 </Nav.Link>
               </Nav.Item>
             </Nav>
-          </div>
-        </div>
-
+        </div> */}
+    {/*............................... Header ends here...................................... */}
+    
+    
       <Form className="search-form" onSubmit={handleOnSubmit}>
         {errorMsg && <p className="errorMsg">{errorMsg}</p>}
         <Row>
@@ -125,6 +146,27 @@ const App = () => {
                 placeholder="Enter description"
                 onChange={handleInputChange}
               />
+            </Form.Group>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <Form.Group controlId="uploadedUnder">
+              <Form.Label><b>Select Cell</b></Form.Label>
+              <Form.Control as="select"
+                type="text" 
+                name="uploadedUnder" 
+                value={state.uploadedUnder || ''} 
+                onChange={handleInputChange}
+              >
+                <option key = 'blankChoice' hidden value> Select Cell</option>
+                {Object.entries(user.role).map(([key, role], i) => (
+                    <option key={i}>
+                        {role}
+                    </option>
+                ))}
+                
+              </Form.Control>            
             </Form.Group>
           </Col>
         </Row>

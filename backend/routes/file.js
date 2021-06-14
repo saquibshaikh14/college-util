@@ -2,6 +2,7 @@ const path = require('path');
 const express = require('express');
 const multer = require('multer');
 const File = require('../db/file');
+const User = require ('../db/User')
 const Router = express.Router();
 const fs =require('fs');
 
@@ -35,15 +36,16 @@ const upload = multer({
     upload.single('file'),
     async (req, res) => {
       try {
-        console.log(req);
-        const { title, description } = req.body;
+        //console.log(req.body);
+        const { title, description ,uploadedUnder} = req.body;
         const { path, mimetype } = req.file;
         const file = new File({
           title,
           description,
           file_path: path,
           file_mimetype: mimetype,
-          //uploadedBy: req.user,
+          uploadedUnder: uploadedUnder,
+          uploadedBy: req.user,
         });
         await file.save();
         res.send('file uploaded successfully.');
@@ -62,8 +64,8 @@ const upload = multer({
 
 Router.get('/getAllFiles', async (req, res) => {
   try {
-    console.log(req.user);
-    const files = await File.find({});
+    //console.log(req.user);
+    const files = await File.find({uploadedUnder:req.user.role});
     const sortedByCreationDate = files.sort(
       (a, b) => b.createdAt - a.createdAt
     );
@@ -87,12 +89,15 @@ Router.get('/download/:id', async (req, res) => {
 });
 
 Router.delete("/delete/:id", function(req, res) {
-  File.findByIdAndRemove(req.params.id, function(err,res) {
+  File.findByIdAndRemove(req.params.id, function(err,data) {
     if(err) {
       res.status(400).send('Error while deleting file. Try again later.');
     } else {
       //console.log(res.file_path);
-      fs.unlink(path.join(__dirname, '..', res.file_path), (err) => {
+      res.status(200).json({
+        msg: data
+      })
+      fs.unlink(path.join(__dirname, '..', data.file_path), (err) => {
         if (err) {
             console.log("failed to delete local image:");
         } else {
@@ -102,4 +107,7 @@ Router.delete("/delete/:id", function(req, res) {
     }
   });
 });
+
+
+
 module.exports = Router;

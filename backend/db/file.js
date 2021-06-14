@@ -20,10 +20,14 @@ const fileSchema = mongoose.Schema(
       type: String,
       required: true
     },
-    // uploadedBy:{
-    //   type: ObjectId,
-    //   ref: "users",
-    // }
+    uploadedUnder: {
+      type: String,
+      required: true,
+    },
+    uploadedBy:{
+      type: ObjectId,
+      ref: "users",
+    }
   },
   {
     timestamps: true

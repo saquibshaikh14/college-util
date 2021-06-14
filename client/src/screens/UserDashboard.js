@@ -13,10 +13,9 @@ export default function UserDashboard() {
 
 
   const location = useLocation();
-  // console.log(location);
 
   const { user, isActive } = useContext(AuthContext);
-  // console.log(user);
+
 
   //get component name from url
 
