@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import {Modal,Button} from 'react-bootstrap';
+import {Modal,Button,ListGroup,Card} from 'react-bootstrap';
 import BootstrapTable from 'react-bootstrap-table-next';
+import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import download from 'downloadjs';
 import axios from 'axios';
@@ -19,36 +20,36 @@ const UserFilesList = () => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  // const getFilesList = async () => {
-  //   try {
-  //     const { data } = await axios.get(`${API_URL}/getAllFiles`,{withCredentials: true});
-  //     setErrorMsg('');
-  //     setFilesList(data);
-  //     toggleLoader(false)
-  //   } catch (error) {
-  //     error.response && setErrorMsg(error.response.data);
-  //     toggleLoader(false)
-  //   }
-  // };
+  const getFilesList = async () => {
+    try {
+      const { data } = await axios.get(`${API_URL}/getAllFiles`,{withCredentials: true});
+      setErrorMsg('');
+      setFilesList(data);
+      toggleLoader(false)
+    } catch (error) {
+      error.response && setErrorMsg(error.response.data);
+      toggleLoader(false)
+    }
+  };
 
 
-  const getFilesList = async () =>{
-    await axios.get(`${API_URL}/getAllFiles`,{withCredentials: true})
-    .then(res=>{
-        if(res.status === 200){
-            setFilesList(res.data);
-            setErrorMsg('');
-            toggleLoader(false)
-        }else{
-            throw Error('Error fetching data');
-        }
-    })
-    .catch(err=>{
-        console.log(err);
-        setErrorMsg(err.message);
-        toggleLoader(false);
-    })
-}
+//   const getFilesList = async () =>{
+//     await axios.get(`${API_URL}/getAllFiles`,{withCredentials: true})
+//     .then(res=>{
+//         if(res.status === 200){
+//             setFilesList(res.data);
+//             setErrorMsg('');
+//             toggleLoader(false)
+//         }else{
+//             throw Error('Error fetching data');
+//         }
+//     })
+//     .catch(err=>{
+//         console.log(err);
+//         setErrorMsg(err.message);
+//         toggleLoader(false);
+//     })
+// }
 
   useEffect(() => {
     getFilesList();
@@ -78,6 +79,9 @@ const deleteFile = (id) =>{
       const split = path.split('/');
       const filename = split[split.length - 1];
       setErrorMsg('');
+      // console.log(result.data);
+      // console.log(mimetype);
+      // console.log(filename);
       return download(result.data, filename, mimetype);
     } catch (error) {
       if (error.response && error.response.status === 400) {
@@ -104,30 +108,48 @@ const deleteFile = (id) =>{
       <AdminLoader />
   )
 
+  const { SearchBar } = Search;
   const columns = [{
     dataField: 'title',
     text: 'Title',
     sort: true,
-    headerStyle: (colum, colIndex) => {
-      return { width: '20%'};
+    headerStyle: (column, colIndex) => {
+      return { width: '25%'};
     },
   }, {
     dataField: 'description',
     text: 'Description',
-    headerStyle: (colum, colIndex) => {
-      return { width: '60%'};
+    headerStyle: (column, colIndex) => {
+      return { width: '35%'};
     }
   }, {
-    dataField: 'button',
-    text: 'Action',
+    dataField: 'Date',
+    text: 'Date Created',
+    searchable: false,
     formatter: (cellContent, row) => {
       return (
         <>
+        {dateFormat(new Date(`${row.createdAt}`))}
+      </>
+      );
+    },
+    headerStyle: (colum, colIndex) => {
+      return { width: '20%'};
+    }
+  },{
+    dataField: 'button',
+    text: 'Action',
+    searchable: false,
+    formatter: (cellContent, row) => {
+      console.log(row);
+      return (
+        <>
         <Button style={{margin: "5px"}} variant="primary" onClick={()=>downloadFile(row._id, row.file_path, row.file_mimetype)}>        
-         Download
+        <i className="download icon"></i>
         </Button>
+        
         <Button variant="danger" onClick={() => handleShow()}>
-        More
+        <i className="options icon"></i>
       </Button>
       </>
       );
@@ -151,7 +173,7 @@ function dateFormat(date) {
   const day = date.getDate();
   const monthString = month >= 10 ? month : `0${month+1}`;
   const dayString = day >= 10 ? day : `0${day}`;
-  return `${date.getFullYear()}-${monthString}-${dayString}`;
+  return `${dayString}-${monthString}-${date.getFullYear()}`;
 }
 
 const ModalContent =()=>{
@@ -161,23 +183,27 @@ const ModalContent =()=>{
         onHide={handleClose}
         backdrop="static"
         keyboard={false}
+        
+      centered
       >
         <Modal.Header closeButton>
           <Modal.Title>{modalInfo.title}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <b>Description:</b> {modalInfo.description}
-          <br/>
-          <b>Uploaded By</b> {modalInfo.uploadedBy} under {modalInfo.uploadedUnder}
-          <br/>
-          <b>Uploaded on</b> {dateFormat(new Date(`${modalInfo.createdAt}`))}
-          <br/>
-          <b>File Type:</b> {modalInfo.file_mimetype}
+        <ListGroup variant="flush">
+          <ListGroup.Item><b>Description:</b> {modalInfo.description}</ListGroup.Item>
+          <ListGroup.Item><b>Uploaded By</b> {modalInfo.uploadedBy} under {modalInfo.uploadedUnder}</ListGroup.Item>
+          <ListGroup.Item><b>Uploaded on</b> {dateFormat(new Date(`${modalInfo.createdAt}`))}</ListGroup.Item>
+          <ListGroup.Item><b>File Type:</b> {modalInfo.file_mimetype}</ListGroup.Item>
+        </ListGroup>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="danger" onClick={() => deleteFile(modalInfo._id, modalInfo.file_path)}>
             Delete
           </Button>
+          {/* <Button variant="danger" onClick={() => downloadFile(modalInfo._id, modalInfo.file_path,modalInfo.file_mimetype)}>
+            Download
+          </Button> */}
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>  
@@ -192,15 +218,28 @@ const ModalContent =()=>{
       {/* Header ends */}
       <div className="files-container">
         {errorMsg && <p className="errorMsg">{errorMsg}</p>}
-        <BootstrapTable
-          bordered={ false }
+        <ToolkitProvider
           keyField='_id' 
           data={ filesList } 
-          columns={ columns }
-          pagination={ paginationFactory() }
-          rowEvents = {rowEvents}
-          noDataIndication={"No files found. Please add some."}
-        />
+          columns={ columns }      
+          search
+        >
+          {
+            props => (
+              <>
+                <SearchBar style={{margin:'3px'}} { ...props.searchProps } />
+                <hr />
+                <BootstrapTable
+                  { ...props.baseProps }
+                  bordered={false}
+                  pagination={ paginationFactory() }
+                  rowEvents = {rowEvents}
+                  noDataIndication={"No files found. Please add some."}
+                />
+              </>
+            )
+          }
+        </ToolkitProvider>
         {show ? <ModalContent/>:null}
       </div>
       
@@ -209,6 +248,36 @@ const ModalContent =()=>{
 };
 
 export default UserFilesList;
+
+
+
+// <>
+//       <CaptionContent/>
+//       {/* Header ends */}
+//       <div className="files-container">
+//         {errorMsg && <p className="errorMsg">{errorMsg}</p>}
+//         <BootstrapTable
+//           bordered={false}
+//           keyField='_id' 
+//           data={ filesList } 
+//           columns={ columns }
+//           pagination={ paginationFactory() }
+//           rowEvents = {rowEvents}
+//           noDataIndication={"No files found. Please add some."}
+//         />
+//         {show ? <ModalContent/>:null}
+
+        
+
+//       </div>
+      
+//     </>
+
+
+
+
+
+
 
 
 

@@ -108,6 +108,27 @@ Router.delete("/delete/:id", function(req, res) {
   });
 });
 
+Router.get('/getLatestFiles', async (req, res) => {
+  try {
+    //console.log(req.user);
+    const files = await File.find({}).sort({createdAt: -1 }).limit(3);
+    //console.log(files);
+    res.send(files);
+  } catch (error) {
+    res.status(400).send('Error while getting list of files. Try again later.');
+  }
+});
+Router.get('/getMyFiles', async (req, res) => {
+  try {
+    // console.log(req.user);
+    const files = await File.find({uploadedUnder:req.user.role, uploadedBy:req.user._id}).sort({createdAt: -1 }).limit(3);
+    //console.log(files);
+    res.send(files);
+  } catch (error) {
+    res.status(400).send('Error while getting list of files. Try again later.');
+  }
+});
+
 
 
 module.exports = Router;

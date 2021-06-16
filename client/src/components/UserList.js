@@ -267,7 +267,6 @@ export default function UserList() {
                                     
                                 </Table.Cell>
                             </Table.Row>
-
                             <Table.Row>
                                 <Table.Cell>
                                 <Header as='h4'>
@@ -287,7 +286,6 @@ export default function UserList() {
                                     
                                 </Table.Cell>
                             </Table.Row>
-
                             <Table.Row>
                                 <Table.Cell>
                                 <Header as='h4'>
@@ -307,7 +305,6 @@ export default function UserList() {
                                     
                                 </Table.Cell>
                             </Table.Row>
-
                             <Table.Row>
                                 <Table.Cell>
                                 <Header as='h4'>
