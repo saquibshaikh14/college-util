@@ -17,6 +17,7 @@ app.use(cors({
     origin: "http://localhost:3000",
     credentials: true
 }));
+
 // app.use((req, res, next)=>{
     
 //     res.setHeader('Access-Control-Allow-Credentials', true);
@@ -25,7 +26,7 @@ app.use(cors({
 //     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,Content-Type');
 
 //     next();
-// })
+// });
 
 app.use(express.static('public')); //place all the static file (i.e. image, icons etc).
 const expressJson = express.json();
@@ -104,6 +105,8 @@ app.use('/sign-up', require('./routes/sign-up-routes'));
 app.use('/log-in', require('./routes/log-in-routes'));
 
 app.use('/cms', require('./routes/cms-routes'));
+
+app.use('/files', require('./routes/file-routes'));
 
 
 

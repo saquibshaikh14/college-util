@@ -84,7 +84,7 @@ export default function LoginScreen() {
       })
       .catch(err=>{
         console.log(err.response);
-        if(err.response.data){
+        if(err.response && err.response.data){
           if(err.response.data.response_status === 401){
             setSubmitError(err.response.data.message);
           }
@@ -101,7 +101,7 @@ export default function LoginScreen() {
   const handleChange = (e) =>{
     if(e.target.name === 'email'){
 
-      let regex = /^[^\s@]+@[^\s@\.]+\.[^\s@]+$/gi;
+      let regex = /^[^\s@]+@[^\s@.]+\.[^\s@]+$/gi;
       
       regex.test(e.target.value)
         ?setFormError({...formError, email: null})

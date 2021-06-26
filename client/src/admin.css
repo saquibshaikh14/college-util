@@ -74,6 +74,7 @@
     transition: background .3s, color .3s;
     color: inherit;
     cursor: pointer;
+    text-transform: capitalize;
 }
 .sidebar-nav-link:hover{
     color: #fff;
@@ -96,6 +97,7 @@
     font-weight: 700;
     text-transform: uppercase;
     transition: .3s;
+    margin-left: 10px;
 }
 .sidebar-nav-divider{
     height: 10px;
@@ -169,7 +171,7 @@
     inset: 0px auto auto 0px;
     top: calc(36px + 0.73rem);
     z-index: 1000;
-    display: none;
+    /* display: none; */
     left: -150%;
     min-width: 10rem;
     font-size: 0.875rem;
@@ -203,7 +205,7 @@
     flex-direction: column;
     flex-grow: 1;
 }
-.content{
+.content-container .content{
     flex-basis: auto;
     flex-shrink: 0;
     flex-grow: 1;

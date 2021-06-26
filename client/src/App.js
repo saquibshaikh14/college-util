@@ -19,7 +19,10 @@ import AuthContextProvider, { AuthContext } from './context/AuthContext';
 import LoginScreen from './screens/LoginScreen';
 import SignupScreen from './screens/SignupScreen';
 import AdminDashboard from './screens/AdminDashboard';
+import UserDashboard from './screens/UserDashboard';
 import Image404 from './resources/page_not_found.svg';
+import UserStatusTemplate from './components/UserStatusTemplate';
+import HomePage from './screens/HomeScreen';
 
 
 function App() {
@@ -35,7 +38,7 @@ function App() {
   //console output
 
   useEffect(() => {
-    consoleFormat()
+    setTimeout(consoleFormat, 200);
   }, [])
 
   let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
@@ -74,14 +77,12 @@ function App() {
           </Route> */}
           <ProtectedRoutes
             path="/user/dashboard"
-            component={(<div>user dashboard <ul><li>check for admin or normal user</li></ul></div>)}
+            component={<UserDashboard />}
           />
 
-          <ProtectedRoutes
-            exact
-            path="/"
-            component={(<div>Home Page</div>)}
-          />
+          <Route exact path="/">
+            <HomePage />
+          </Route>
           
           {/* if no match */}
           <Route path="*">
@@ -110,12 +111,17 @@ export default App;
 
 function ProtectedRoutes({component, ...rest}){
   const {user} = useContext(AuthContext);
+
+  console.log(user);
+
   //console.log(user && user.length > 0)
+  //check user status also (lke, isAllowed, inActive, etc...)
+  //depending on the case redirect or show component.
   return( <Route
     {...rest}
     render={({location})=>
       (user)
-      ? (component)
+      ? (user.isAllowed!=='active')?<UserStatusTemplate/>:(component)
       : (
         <Redirect
           to={{

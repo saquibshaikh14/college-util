@@ -2,6 +2,9 @@ const mongoose = require('mongoose');
 
 const url = 'mongodb+srv://saquib:saquib@test.kcaqx.mongodb.net/test?retryWrites=true&w=majority';
 
+//testing mobile mongodb server
+//const url = 'mongodb://192.168.43.1'
+
 const option = {useUnifiedTopology: true, useNewUrlParser: true, useFindAndModify: false};
 
 module.exports = function(){

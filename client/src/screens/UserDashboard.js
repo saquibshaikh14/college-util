@@ -1,23 +1,14 @@
 import React, { useContext, useState } from 'react';
-import { Redirect, useLocation, Link} from 'react-router-dom';
 import axios from 'axios';
-
-
-//import roleOption from '../Role';
+import { Redirect, useLocation, Link} from 'react-router-dom';
 
 // import '../admin.css';
 
 import {Icon, Modal, Message, Grid} from 'semantic-ui-react';
 import Sidebar from '../components/Sidebar';
 import { AuthContext } from '../context/AuthContext';
-
-import UserList from '../components/UserList';
-import AdminDefault from '../components/AdminDefault';
+import UserDefault from '../components/UserDefault';
 import CellTemplate from '../components/CellTemplate';
-
-
-//TODO: admin user interaction
-
 
 
 export default function AdminDashboard() {
@@ -30,9 +21,7 @@ export default function AdminDashboard() {
 
     let urlComponent = location.pathname.split('/');
     let componentName = urlComponent[3] || 'default';
-    // console.log(componentName)
 
-    //toggle logout button
     const [isVisibleLogoutButton,  toggleLogoutButton] = useState(false);
 
     const logoutUser = () => {
@@ -53,21 +42,21 @@ export default function AdminDashboard() {
     }
 
     //component to render (if parameter doesnot contain any of this show 404)
-    //makesure to import all the components that are allowed(i.e present in roleOption);
     const component = {
-        allowedComponent: ["user-list", "default", ...user.role], //array of component name (url freindly);
-        "user-list": UserList,
-        "default": AdminDefault,
+        allowedComponent: ["uploadFile", "default", "viewFile", ...user.role], //array of component name (url freindly);
+        // "uploadFile": UserList,
+        // "viewFile": AdminDefault,
+        "default": UserDefault,
         "cellTemplate": CellTemplate
+        
     }
-
     let ActiveComponent = null;
     if(component.allowedComponent.includes(componentName))
     {
         ActiveComponent = component[user.role.includes(componentName)?'cellTemplate':componentName];
     }
+    
 
-    //console.log(component)
 
     // if(!user){
     //     return <Redirect
@@ -81,28 +70,25 @@ export default function AdminDashboard() {
     //     />
     // }
     if(user){
-       if(user.role && !user.role.includes('ADMIN')){
-           return <Redirect to="/user/dashboard" />
-       }
+        if(user.role && user.role.includes('ADMIN')){
+            return <Redirect to="/admin/dashboard" />
+        }
     }else{
         return (<Redirect to={{pathname: "/log-in", state: {from: location, message: 'Login to access protected routes'}}} />)
     }
-    
-
     
     return (
 
         <div className="dashboard-container">
             {!isActive && (
                 <Modal size="mini" open={!isActive} closeOnDimmerClick={false} content="Logged out due to inactivity. &nbsp; Refresh page!" />
-              
             )}
 
             <Sidebar activeNav={urlComponent[3]} baseUrl={urlComponent[1]} roles={user.role} />
             {/* sidebar ends */}
 
             <div className="right-panel">
-                <header className="dashboard-header">
+            <header className="dashboard-header">
                     <h5 style={{display: "flex", alignItems: "center", padding:" 0 1rem 0 2rem", marginBottom: 0}}> Overview</h5>
 
                     <ul className="header-nav-list">
@@ -146,46 +132,16 @@ export default function AdminDashboard() {
                 <div className="content-container">
                     <main className="content">
                         <div className="fluid-container">
-                            {/* <Router>
-                                <Route pathname={location.pathname}
-                                    render={()=>{
-                                        
-                                        if(component.allowedComponent.includes(componentName)){
-                                            let Component = component[componentName];
-
-                                            return <Component/>
-                                        }else{
-                                            return (
-                                                <Grid centered columns={2}>
+                        {ActiveComponent?(<ActiveComponent activeCell={urlComponent[3]} key={urlComponent[3]}/>):(<Grid centered columns={2}>
                                                 <Grid.Column>
                                                 <Message negative>
                                                     <Message.Header>Invalid URL</Message.Header>
                                                     <p>Please check the url or go back to dashboard  
-                                                        <Link to="/login"> home</Link>
-                                                        <Link to={"/dashboard"} className="sidebar-nav-link">
-
-                                                            Dashboard
-                                                        </Link>
-                                                    </p>
-                                                </Message>
-                                                </Grid.Column>
-                                                </Grid>
-                                            )
-                                        }
-                                    }}
-                                />
-                            </Router> */}
-                            {ActiveComponent?(<ActiveComponent activeCell={urlComponent[3]} key={urlComponent[3]}/>):(<Grid centered columns={2}>
-                                                <Grid.Column>
-                                                <Message negative>
-                                                    <Message.Header>Invalid URL</Message.Header>
-                                                    <p>Please check the url or go back to dashboard  
-                                                        <Link to="/admin/dashboard"> home</Link>
+                                                        <Link to="/user/dashboard"> home</Link>
                                                     </p>
                                                 </Message>
                                                 </Grid.Column>
                                                 </Grid>)}
-
                         </div>
                     </main>
                 </div>

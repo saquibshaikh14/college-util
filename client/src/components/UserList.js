@@ -49,7 +49,7 @@ export default function UserList() {
         setUsersList([...usersList].reverse());
     }
 
-    const getUserList = () =>{
+    const getUserList = (componentStatus) =>{
         axios.get('http://localhost:5000/cms/userList',{withCredentials: true})
         .then(res=>{
             if(res.status === 200){
@@ -61,6 +61,11 @@ export default function UserList() {
         })
         .then(result=>{
             //console.log(result);
+
+            //if component is unmounted donot update states
+            if(!componentStatus.isMounted)
+                return;
+
 
             //check for status
             if(result.response_status === 1000){
@@ -75,6 +80,10 @@ export default function UserList() {
             }
         }).catch(err=>{
             console.log(err);
+
+            if(!componentStatus.isMounted)
+                return;
+
             setError(err.message);
             toggleLoader(false);
         })
@@ -84,7 +93,7 @@ export default function UserList() {
         //update data
         setDisabledButton(true);
 
-        axios.post('http://localhost:5000/cms/userList', {
+        axios.post('http://localhost:5000/cms/updateUserList', {
             _id: modalData._id,
             email: modalData.email,
             role: modalData.role,
@@ -94,14 +103,18 @@ export default function UserList() {
             if(res.status === 200){
                 return res.data;
             }else{
-               
-                throw Error('Error fetching data');
+                setDisabledButton(false);
+                alert('Error fetching data');
             }
+            return false;
         })
         .then(result=>{
+
             console.log(result);
+            if(!result)
+                return;
+
             if(result.response_status === 1000){
-                setDisabledButton(false);
                 //update existing user list
                 let updatedUserList = usersList.map((user, index)=>{
                     if(user._id===modalData._id){
@@ -113,17 +126,19 @@ export default function UserList() {
                 
                 setUsersList(updatedUserList);
                 setModalData(null);
+                alert('Updated');
             }
             else if(result.response_status === 1001 || result.response_status === 1002){
-                throw Error(result.message);
+                alert(result.message);
             }else {
                 console.log(result);
-                throw Error('Error, check console for more');
+                alert('Error, check console for more');
             }
+            setDisabledButton(false);
         })
         .catch(err=>{
             console.log(err);
-            setError(err.message);
+            alert(err.message);
             setDisabledButton(false)
         })
 
@@ -133,8 +148,15 @@ export default function UserList() {
     }
 
     useEffect(() => {
+        let componentStatus = {
+            isMounted: true
+        };
         //get user data from server.
-        getUserList();
+        getUserList(componentStatus);
+
+        return ()=>{
+            componentStatus.isMounted = false;
+        };
 
     }, [])
 
@@ -155,9 +177,10 @@ export default function UserList() {
     return (
         <div>   
 
-            {modalData && <Modal open={modalData} onClose={()=>setModalData(null)} size='small' style={{padding: '20px 30px'}} closeOnDimmerClick={false}>
+            {modalData && <Modal open={modalData?true:false} onClose={()=>setModalData(null)} size='small' style={{padding: '20px 30px'}} closeOnDimmerClick={false}>
                 <div>
                     <Table basic celled>
+                        <Table.Body>
                         <Table.Row>
                             <Table.Cell>Name</Table.Cell>
                             <Table.Cell>{modalData.name}</Table.Cell>
@@ -165,6 +188,10 @@ export default function UserList() {
                         <Table.Row>
                             <Table.Cell>Email</Table.Cell>
                             <Table.Cell>{modalData.email}</Table.Cell>
+                        </Table.Row>
+                        <Table.Row>
+                            <Table.Cell>Joined</Table.Cell>
+                            <Table.Cell>{getDate(modalData.date_created)}</Table.Cell>
                         </Table.Row>
                         <Table.Row>
                             <Table.Cell>status</Table.Cell>
@@ -196,6 +223,7 @@ export default function UserList() {
                                 />
                             </Table.Cell>
                         </Table.Row>
+                        </Table.Body>
                     </Table>
                     <div style={{textAlign: "right"}}>
                         <button className="ui red button" disabled={disabledButton} onClick={()=>setModalData(null)}> Cancel </button>
@@ -237,7 +265,10 @@ export default function UserList() {
                                         </Table.Cell>
                                         <Table.Cell>{user.email}</Table.Cell>
                                         <Table.Cell>{getDate(user.date_created)}</Table.Cell>
-                                        <Table.Cell singleLine={false}>{user.role.map((role, index)=>(user.role.length - 1 === index? role: role + " | "))}</Table.Cell>
+                                        {/*<Table.Cell singleLine={false}>{user.role.map((role, index)=>(user.role.length - 1 === index? role: role + " | "))}</Table.Cell> */}
+                                        <Table.Cell singleLine={false}>
+                                            {user.role.join(" | ")}
+                                        </Table.Cell>
                                         <Table.Cell>
                                             <Label color={statusColor[user.isAllowed]}
                                             content={user.isAllowed}

@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from "react";
 import { Link, useHistory } from "react-router-dom";
+import roleOption from '../Role';
 import { Grid, Header, Form, Segment, Message } from "semantic-ui-react";
 
 export default function SignupScreen() {
@@ -8,44 +9,48 @@ export default function SignupScreen() {
 
   const [formError, setFormError] = useState({});
 
-  const [submitError, setSubmitError] = useState(false);
+  const [submitError, setSubmitError] = useState([]);
 
   const [isFormSubmitting, setFormSubmitting] = useState(false);
 
+  const [selectedRole, setFormRoleValue] = useState([]);
+
   const history = useHistory();
 
-  const roleOption = [
-      {text: "Exam Cell", value: "EXAM_CELL"},
-      {text: "Placement Cell", value: "PLACEMENT_CELL"},
-  ]
 
   const handleSubmit = (e) =>{
 
-    setSubmitError(null);
+    console.log('clcked')
+    setSubmitError([]);
 
     e.preventDefault();
 
     let email = e.target.email.value;
     let password = e.target.password.value;
-    let role = e.target.role.value;
+    let role = selectedRole.length>0?selectedRole:null;
     let name = e.target.name.value;
 
-    let error = {};
+    let error = [];
 
 
     if(!name)
-      error.name = "Required";
+      error.push('Name is required!');
     if(!email)
-      error.email = "Required";
+      error.push('Email is required!');
     if(!password)
-      error.password = "Required";
+      error.push('Password is required!');
     if(!role)
-      error.role = "Required";
+      error.push('Please select role!');
 
-    if(error && Object.keys(error).length > 0)
-        setFormError({...formError, ...error});
+      console.log(role)
 
-    if(error && Object.keys(error).length === 0){
+    if(error && error.length > 0){
+        setSubmitError(error);
+        setFormSubmitting(false);
+        return;
+    }
+
+    if(error && error.length === 0){
       setFormSubmitting(true);
 
       fetch('http://localhost:5000/sign-up', {
@@ -57,8 +62,9 @@ export default function SignupScreen() {
         method: "POST",
         body: JSON.stringify({email, password, role, name})
       })
-      .then(res=>res.json())
+      .then(res=>{console.log(res); return res.json();})
       .then(result=>{
+        console.log(result)
         //show successful message
         if(result.response_status===1000)
           {
@@ -73,7 +79,7 @@ export default function SignupScreen() {
           setSubmitError(result.message + " " + result.response_status);
         setFormSubmitting(false);
       })
-      .catch(err=>{setSubmitError("Network Error");setFormSubmitting(false);});
+      .catch(err=>{console.log(err); setSubmitError("Network Error");setFormSubmitting(false);});
     }
     
   }
@@ -81,7 +87,7 @@ export default function SignupScreen() {
   const handleChange = (e) =>{
     if(e.target.name === 'email'){
 
-      let regex = /^[^\s@]+@[^\s@\.]+\.[^\s@]+$/gi;
+      let regex = /^[^\s@]+@[^\s@.]+\.[^\s@]+$/gi;
       
       regex.test(e.target.value)
         ?setFormError({...formError, email: null})
@@ -94,10 +100,19 @@ export default function SignupScreen() {
       regex.test(e.target.value)
         ?setFormError({...formError, password:null})
         :setFormError({...formError, password: "At least one letter, one number and one special character"});
-    }else{
-      //changed last setFormError parameter from setFormError
-        e.target.value?setFormError({...formError, [e.target.name]: null}):setFormError({...formError, [e.target.name]: "Required!"})
     }
+    else if(e.target.name === 'role'){
+      if(e.target.checked){
+        setFormRoleValue([...selectedRole, e.target.value]);
+      }else{
+        let updatedRole = selectedRole.filter(value =>value!==e.target.value)
+        setFormRoleValue(updatedRole);
+      }
+    }
+    // else{
+    //   //changed last setFormError parameter from setFormError
+    //     e.target.value?setFormError({...formError, [e.target.name]: null}):setFormError({...formError, [e.target.name]: "Required!"})
+    // }
   
   }
 
@@ -124,7 +139,7 @@ export default function SignupScreen() {
             <br />
             Signup
           </Header>
-          {submitError &&
+          {submitError.length > 0 &&
           <Message color="red">
             <Message.Header>
               {submitError}
@@ -153,14 +168,27 @@ export default function SignupScreen() {
                 onChange={handleChange}
               />
              
-              <Form.Field control='select' name="role" error={formError && formError.role} onChange={handleChange}>
+              {/* <Form.Field control='select' name="role" error={formError && formError.role} onChange={handleChange} multiple>
                 {roleOption.map((role, index) =>{
                     return(
                         <option value={role.value} key={index}>{role.text}</option>
                     )
                 })}
 
+              </Form.Field> */}
+
+              
+              <Form.Field className="role-select">
+                <label>Select Role</label>
+                {roleOption.map((role, index) =>{
+                    return(
+                      <div style={{width: '100%'}}  key={index}>
+                        <input type="checkbox" name="role" value={role.value} onClick={handleChange}/> <label>{role.text}</label>
+                      </div>
+                    )
+                })}
               </Form.Field>
+
               <Form.Input
                 fluid
                 icon="lock"

@@ -1,0 +1,62 @@
+/* sign up role checkbox */
+
+.role-select{
+    text-align: left;
+}
+.role-select input[type=checkbox]{
+    vertical-align: baseline !important;
+}
+.role-select input[type=checkbox]+label{
+    color: #ccc;
+}
+
+.role-select input[type="checkbox"]:checked + label{
+    color: #333;
+}
+.ui.modal>.content {
+    color: #000 !important;
+}
+
+
+.upload-file-btn{
+    background-color: rgb(56, 163, 56);
+    color: #fff;
+    border-radius: 12px;
+    padding: 10px 20px;
+    cursor: pointer;
+    outline: none;
+    border: none;
+}
+.upload-file-btn:hover{
+    background-color: green;
+}
+
+
+/* modal form file list (cell Template) */
+.modal-form-container{
+    position: fixed;
+    top:0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0,0,0,0.9);
+    z-index: 10000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.modal-form{
+    width: 95%;
+    height: 95%;
+    background-color: honeydew;
+    border-radius: 12px;
+}
+.dis{
+    background-color: rgb(87, 86, 86)!important;
+}
+.dis:hover{
+    background-color: rgb(87, 86, 86)!important;
+}
+.disable_btn{
+    background-color: rgba(158, 158, 158, 0.7)!important;
+}

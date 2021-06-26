@@ -15,7 +15,7 @@ routes.get('/userList', async (req, res)=>{
 
         if(!user)
             return res.json({message: "Unauthorized access", response_status: 1001});
-        if(user.role != 'ADMIN')
+        if(!user.role.includes('ADMIN'))
             return res.json({message: "Login with ADMIN", response_status: 1001});
         
         //user is logged in with admin id
@@ -30,15 +30,15 @@ routes.get('/userList', async (req, res)=>{
     }
 });
 
-routes.post('/userList', async (req, res) => {
+routes.post('/updateUserList', async (req, res) => {
     try{
         let user = req.user;
 
-        await delay(1000);
+        await delay(3000);
 
         if(!user)
             return res.json({message: "Unauthorized access", response_status: 1001});
-        if(user.role != 'ADMIN')
+        if(!user.role.includes('ADMIN'))
             return res.json({message: "Login with ADMIN", response_status: 1001});
         
         let {_id, email, role, isAllowed} = req.body;
