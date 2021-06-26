@@ -52,7 +52,8 @@ export default function Sidebar({activeNav, baseUrl, roles}) {
                     if(role !== 'ADMIN')
                        return (
                         <li className={"sidebar-nav-item" + (activeNav && activeNav===role? " side-nav-active":"")}>
-                                <Link to={"/" + baseUrl + "/dashboard/" + role} className="sidebar-nav-link" style={{paddingLeft: 70}}>
+                                <Link to={"/" + baseUrl + "/dashboard/" + role} className="sidebar-nav-link">
+                                    <Icon name="folder outline" />
                                     {role.toLowerCase()}
                                 </Link>
                         </li>

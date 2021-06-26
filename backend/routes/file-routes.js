@@ -2,6 +2,7 @@ const express = require('express');
 const router =express.Router();
 const fs = require('fs');
 const multer = require('multer');
+const path = require('path');
 
 const File = require('../db/File');
 const roles = require('../db/enum_role');
@@ -48,7 +49,7 @@ const upload = multer({
       }
     }),
     limits: {
-      fileSize: 1000000 // max file size 1MB = 1000000 bytes
+      fileSize: 10000000 // max file size 10MB = 1000000 bytes
     },
     fileFilter(req, file, cb) {
       if (!file.originalname.match(/\.(jpeg|jpg|png|pdf|doc|docx|xlsx|xls)$/)) {
@@ -96,8 +97,8 @@ router.post('/uploadfile', upload.single('file'),async(req, res)=>{
             uploadedBy: {_id: user._id, email: user.email} 
         }});
     }catch(err){
-        console.log(err);
-        res.json({message: "Internal server error", response_status: 10002});
+        console.log(err.message);
+        res.json({message: err.message, response_status: 1002});
     }
 });
 
@@ -122,14 +123,16 @@ router.post('/deletefile', async (req, res)=>{
         return res.json({response_status: 1000, message: 'Deleted'});
     }catch(err){
         console.log(err);
-        res.json({message: "Internal server error", response_status: 10002});
+        res.json({message: "Internal server error", response_status: 1002});
     }
 });
 
 
 router.post('/downloadfile', async (req, res)=>{
     try{
-        const user = req.user;
+        
+       const user = req.user;
+        
         if(!user)
             return res.json({message: "Unauthorized access", response_status: 1001});
         
@@ -145,13 +148,13 @@ router.post('/downloadfile', async (req, res)=>{
         const fileExists = async path => !!(await fs.promises.stat(path).catch(e => false));
 
         if(await fileExists(path.join(__dirname, '..', file.file_path)))
-            return res.download(path.join(__dirname, '..', file.file_path));
+            return res.download(path.join(__dirname, '..', file.file_path), 'download', (err)=>{console.log(err)});
         else
             return res.json({response_status: 1002, message: "file not found"});
 
     }catch(err){
         console.log(err);
-        res.json({message: "Internal server error", response_status: 10002});
+        res.json({message: "Internal server error", response_status: 1002});
     }
 })
 

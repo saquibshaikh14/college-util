@@ -3,6 +3,7 @@ import fileDownload from 'js-file-download';
 import React, { useEffect, useState } from 'react';
 import { Card, Table , Icon, Grid, Popup, Form} from 'semantic-ui-react';
 
+
 import AdminLoader from './AdminLoader';
 
 export default function CellTemplate({activeCell}) {
@@ -101,21 +102,35 @@ export default function CellTemplate({activeCell}) {
     }
 
     const downloadFile = (fileId, title, path) =>{
-        axios.post('http://localhost:5000/files/downloadfile',{id: fileId}, {responseType: 'blob'})
+        axios.post('http://localhost:5000/files/downloadfile',{id: fileId}, {responseType: 'blob', withCredentials: true})
         .then(res=>{
+            
             if(res.status === 200){
-                return res.data;
+                console.log(res, res.data, res.headers['content-type'], res.data.type);
+                //console.log(JSON.parse(res.data))
+                if(res.data.type.match(/json/gi))
+                {
+                    // console.log(res.data.text())
+                    return new Promise((resolve, reject)=>{
+                        res.data.text()
+                        .then(text=>resolve(JSON.parse(text)))
+                        .catch(err=>reject({response_status: 1002, message: 'Error converting to text data'}));
+                    });
+                }
+                 else   
+                    return res.data;
             }else{
                // setDisabledButton(false);
+               console.log(res.status)
                 alert('Error getting data');
-            }
-            console.log(res);
-            return false;
+                return false;
+            };
         })
         .then(result=>{
-            //console.log(result);
+            
             if(!result)
                 return;
+            
             // if(result.response_status === 1000){
             //     //setDisabledButton(false);
             //     //update existing user list
@@ -127,8 +142,9 @@ export default function CellTemplate({activeCell}) {
             let pathSplit = path.split('/');
             let fileExtension = pathSplit[pathSplit.length - 1];
 
-            fileDownload(result.response_data, title+fileExtension);
-            //setDisabledButton(false);
+            //download(result.response_data, title + fileExtension);
+            fileDownload(result, title+fileExtension);
+            setDisabledButton(false);
         })
         .catch(err=>{ console.log(err); alert(err.message)})
 
@@ -182,6 +198,7 @@ export default function CellTemplate({activeCell}) {
                     cell: activeComponent.trim()
                 })
                 setActiveComponent(activeComponent + ' ');
+                setModalView(false);
             }
             else if(result.response_status === 1001 || result.response_status === 1002){
                 alert(result.message);
@@ -192,6 +209,7 @@ export default function CellTemplate({activeCell}) {
             setDisabledButton(false);
         })
         .catch(err=>{
+            setDisabledButton(false);
             console.log(err);
             alert(err.message);
         })
@@ -297,7 +315,7 @@ export default function CellTemplate({activeCell}) {
                             </Form>
                         </div>
                         <div style={{flex: 1, textAlign: "center"}}>
-                            {previewAvailable?<img src={URL.createObjectURL(uploadForm.uploadImage)} alt="File" style={{maxHeight: '500px'}}/>:"No preview available"}
+                            {previewAvailable?<img src={URL.createObjectURL(uploadForm.uploadImage)} alt="File" style={{maxHeight: '500px', maxWidth: '500px'}}/>:"No preview available"}
                             
                         </div>
                     </div>
