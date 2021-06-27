@@ -9,7 +9,7 @@ import AdminLoader from './AdminLoader';
 export default function CellTemplate({activeCell}) {
 
     const [fileList, setFileList]= useState([]);
-    const [activeComponent, setActiveComponent] = useState(activeCell);
+    const [activeComponent] = useState(activeCell);
     //setActiveComponent(activeComponent)
     
     const [error, setError] = useState(false);
@@ -189,7 +189,7 @@ export default function CellTemplate({activeCell}) {
                 return;
             if(result.response_status === 1000){
                 alert('File uploaded');
-                //setFileList([result.response_data,...fileList])
+               
                 setPreviewAvailable(false);
                 setUploadForm({
                     title: '',
@@ -197,7 +197,8 @@ export default function CellTemplate({activeCell}) {
                     uploadImage: '',
                     cell: activeComponent.trim()
                 })
-                setActiveComponent(activeComponent + ' ');
+                setFileList([result.response_data,...fileList])
+                //setActiveComponent(activeComponent + ' ');
                 setModalView(false);
             }
             else if(result.response_status === 1001 || result.response_status === 1002){

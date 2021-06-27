@@ -12,11 +12,11 @@ import Sidebar from '../components/Sidebar';
 import { AuthContext } from '../context/AuthContext';
 
 import UserList from '../components/UserList';
-import AdminDefault from '../components/AdminDefault';
+import Default from '../components/Default';
 import CellTemplate from '../components/CellTemplate';
 
 
-//TODO: admin user interaction
+//TODO: Notiofication when new user sign up
 
 
 
@@ -57,7 +57,7 @@ export default function AdminDashboard() {
     const component = {
         allowedComponent: ["user-list", "default", ...user.role], //array of component name (url freindly);
         "user-list": UserList,
-        "default": AdminDefault,
+        "default": Default,
         "cellTemplate": CellTemplate
     }
 
@@ -145,7 +145,7 @@ export default function AdminDashboard() {
                 {/* header ends */}
                 <div className="content-container">
                     <main className="content">
-                        <div className="fluid-container">
+                        <div className="fluid-container" style={{height: '100%'}}>
                             {/* <Router>
                                 <Route pathname={location.pathname}
                                     render={()=>{

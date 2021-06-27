@@ -30,14 +30,14 @@ export default function Sidebar({activeNav, baseUrl, roles}) {
                     roles.includes('ADMIN') &&
                     (
                         <>
-                            <li className={"sidebar-nav-item "} name="notification">
+                            <li className={"sidebar-nav-item "}>
                                     {/* <button className="ui fluid button sidebar-nav-button">Some text</button> */}
                                 <div role="button" className="sidebar-nav-link">
                                     <Icon name="bell outline" />
                                     Notification
                                 </div>
                             </li>
-                            <li className={"sidebar-nav-item" + (activeNav && activeNav==="user-list"? " side-nav-active":"")} name="users">
+                            <li className={"sidebar-nav-item" + (activeNav && activeNav==="user-list"? " side-nav-active":"")}>
                                 <Link to={"/" + baseUrl + "/dashboard/user-list"} className="sidebar-nav-link">
                                     <Icon name="users" />
                                     Users
@@ -51,7 +51,7 @@ export default function Sidebar({activeNav, baseUrl, roles}) {
                     roles.map((role, index)=>{
                     if(role !== 'ADMIN')
                        return (
-                        <li className={"sidebar-nav-item" + (activeNav && activeNav===role? " side-nav-active":"")}>
+                        <li className={"sidebar-nav-item" + (activeNav && activeNav===role? " side-nav-active":"")} key={role}>
                                 <Link to={"/" + baseUrl + "/dashboard/" + role} className="sidebar-nav-link">
                                     <Icon name="folder outline" />
                                     {role.toLowerCase()}

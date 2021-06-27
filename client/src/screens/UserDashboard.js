@@ -7,7 +7,8 @@ import { Redirect, useLocation, Link} from 'react-router-dom';
 import {Icon, Modal, Message, Grid} from 'semantic-ui-react';
 import Sidebar from '../components/Sidebar';
 import { AuthContext } from '../context/AuthContext';
-import UserDefault from '../components/UserDefault';
+// import UserDefault from '../components/UserDefault';
+import Default from '../components/Default';
 import CellTemplate from '../components/CellTemplate';
 
 
@@ -46,7 +47,7 @@ export default function AdminDashboard() {
         allowedComponent: ["uploadFile", "default", "viewFile", ...user.role], //array of component name (url freindly);
         // "uploadFile": UserList,
         // "viewFile": AdminDefault,
-        "default": UserDefault,
+        "default": Default,
         "cellTemplate": CellTemplate
         
     }
