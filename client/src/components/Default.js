@@ -167,14 +167,14 @@ export default function Default() {
                                                 {file.title}
                                             </Card.Header>
                                             <Card.Meta>
-                                                <i><b>By </b>{ file.uploadedBy?.email}</i> <small>10 days ago</small>
+                                                <i><b>By </b>{ file.uploadedBy?.email}</i> <small>1 day ago</small>
                                             </Card.Meta>
                                             <Card.Meta>{file.uploadedUnder}</Card.Meta>
                                             <Card.Description>
                                                 {file.description}
                                             </Card.Description>
                                         </Card.Content>
-                                        <div class="ui bottom attached button" onClick={()=>downloadFile(file._id, file.title, file.file_path)}>
+                                        <div class="ui bottom primary attached button" onClick={()=>downloadFile(file._id, file.title, file.file_path)}>
                                             <i class="download icon"></i>
                                             Download
                                         </div>
@@ -203,7 +203,7 @@ export default function Default() {
                                                 {file.title}
                                             </Card.Header>
                                             <Card.Meta>
-                                                <i><b>By </b>{file.uploadedBy?.email}</i> <small>10 days ago</small>
+                                                <i><b>By </b>{file.uploadedBy?.email}</i> <small>1 day ago</small>
                                             </Card.Meta>
                                             <Card.Meta>{file.uploadedUnder}</Card.Meta>
                                             <Card.Description>
@@ -211,11 +211,11 @@ export default function Default() {
                                             </Card.Description>
                                         </Card.Content>
                                         <div class="ui two buttons attached">
-                                            <div class="ui bottom attached button" onClick={()=>downloadFile(file._id, file.title, file.file_path)}>
+                                            <div class="ui bottom primary attached button" onClick={()=>downloadFile(file._id, file.title, file.file_path)}>
                                                 <i class="download icon"></i>
                                                 Download
                                             </div>
-                                            <div class="ui bottom attached button" onClick={(e)=>deleteFile(file._id)}>
+                                            <div class="ui bottom negative attached button" onClick={(e)=>deleteFile(file._id)}>
                                                 <i class="remove icon"></i>
                                                 Delete
                                             </div>
