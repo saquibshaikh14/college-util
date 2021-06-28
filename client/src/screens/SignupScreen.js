@@ -135,9 +135,9 @@ export default function SignupScreen() {
       >
         <Grid.Column style={{ maxWidth: 450 }}>
 
-          <Header as="p" color="blue" textAlign="center">
+          <Header as="p" color="yellow" textAlign="center">
             <br />
-            Signup
+            SignUp
           </Header>
           {submitError.length > 0 &&
           <Message color="red">

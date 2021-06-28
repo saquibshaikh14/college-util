@@ -132,7 +132,7 @@ export default function LoginScreen() {
     `}</style>
       <Grid
         textAlign="center"
-        style={{ height: "100%" }}
+        style={{ height: "100%"}}
         verticalAlign="middle"
       >
         <Grid.Column style={{ maxWidth: 450 }}>
@@ -142,9 +142,9 @@ export default function LoginScreen() {
             {message? message: ""}
         </Header>
 
-          <Header as="p" color="blue" textAlign="center">
+          <Header as="p" color="yellow" textAlign="center">
             <br />
-            Login
+            LogIn
           </Header>
           {submitError &&
           <Message color="red">

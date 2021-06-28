@@ -87,6 +87,11 @@ body {
 .hidden-initial {
   opacity: 0;
   transition: opacity 0.8s ease-in-out;
+  background-image: url(./document.jpg);
+  height: 100vh; 
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 .show-component{
   opacity: 100%;
