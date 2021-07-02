@@ -30,13 +30,13 @@ export default function Sidebar({activeNav, baseUrl, roles}) {
                     roles.includes('ADMIN') &&
                     (
                         <>
-                            <li className={"sidebar-nav-item "}>
-                                    {/* <button className="ui fluid button sidebar-nav-button">Some text</button> */}
+                            {/* <li className={"sidebar-nav-item "}>
+                                    
                                 <div role="button" className="sidebar-nav-link">
                                     <Icon name="bell outline" />
                                     Notification
                                 </div>
-                            </li>
+                            </li>  */}
                             <li className={"sidebar-nav-item" + (activeNav && activeNav==="user-list"? " side-nav-active":"")}>
                                 <Link to={"/" + baseUrl + "/dashboard/user-list"} className="sidebar-nav-link">
                                     <Icon name="users" />

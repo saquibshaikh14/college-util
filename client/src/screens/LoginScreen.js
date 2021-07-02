@@ -121,7 +121,7 @@ export default function LoginScreen() {
   useEffect(()=>{setTimeout(function(){changeAnimateClass('show-component')}, 100)},[]);
 
   return (
-      <div className={"signup-form hidden-initial " + animateClass}>
+      <div className={"login-form hidden-initial " + animateClass}>
       
       <style>{`
       body > div,
@@ -142,7 +142,7 @@ export default function LoginScreen() {
             {message? message: ""}
         </Header>
 
-          <Header as="p" color="blue" textAlign="center">
+          <Header as="p" color="yellow" textAlign="center">
             <br />
             Login
           </Header>

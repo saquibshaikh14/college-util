@@ -33,7 +33,7 @@
 
 
 /* modal form file list (cell Template) */
-.modal-form-container{
+.modal-form-container, .modal-filedesc-container{
     position: fixed;
     top:0;
     left: 0;
@@ -45,7 +45,7 @@
     justify-content: center;
     align-items: center;
 }
-.modal-form{
+.modal-form, .modal-filedesc{
     width: 95%;
     height: 95%;
     background-color: honeydew;
@@ -59,4 +59,21 @@
 }
 .disable_btn{
     background-color: rgba(158, 158, 158, 0.7)!important;
+}
+/* file description */
+.modal-filedesc{
+    min-width: 500px;
+    max-width: 600px;
+    height: auto;
+    padding: 20px;
+}
+.filedesc-close-modal{
+    background-color: rgb(224, 222, 222);
+    padding: 10px 15px;
+    border-radius: 100%;
+    cursor: pointer;
+    transition: background 0.3s linear;
+}
+.filedesc-close-modal:hover{
+    background-color: rgb(190, 190, 190);
 }

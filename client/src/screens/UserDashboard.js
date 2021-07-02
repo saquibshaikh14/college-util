@@ -114,10 +114,10 @@ export default function AdminDashboard() {
                                 isVisibleLogoutButton &&
                                 (
                                     <div className="header-dropdwon-menu">
-                                        <div role="button" className="header-dropdown-item">
+                                        {/* <div role="button" className="header-dropdown-item">
                                             <Icon name="user circle" size="small" />
                                             Profile
-                                        </div>
+                                        </div> */}
                                         <div role="button" className="header-dropdown-item" onClick={logoutUser}>
                                             <Icon name="log out" size="small" />
                                             Logout

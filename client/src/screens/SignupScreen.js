@@ -119,7 +119,7 @@ export default function SignupScreen() {
   useEffect(()=>{setTimeout(function(){changeAnimateClass('show-component')}, 100)},[]);
 
   return (
-    <div className={"login-form hidden-initial " + animateClass}>
+    <div className={"signup-form hidden-initial " + animateClass}>
       
       <style>{`
       body > div,
@@ -135,7 +135,7 @@ export default function SignupScreen() {
       >
         <Grid.Column style={{ maxWidth: 450 }}>
 
-          <Header as="p" color="blue" textAlign="center">
+          <Header as="p" color="yellow" textAlign="center">
             <br />
             Signup
           </Header>
@@ -183,7 +183,7 @@ export default function SignupScreen() {
                 {roleOption.map((role, index) =>{
                     return(
                       <div style={{width: '100%'}}  key={index}>
-                        <input type="checkbox" name="role" value={role.value} onClick={handleChange}/> <label>{role.text}</label>
+                        <input type="checkbox" name="role" value={role.value} onClick={handleChange}/> <label>{role.label}</label>
                       </div>
                     )
                 })}

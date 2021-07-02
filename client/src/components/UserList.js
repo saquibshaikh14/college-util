@@ -20,7 +20,11 @@ export default function UserList() {
     const roleOption = [
         {label: 'ADMIN', value: 'ADMIN'},
         {label: 'PLACEMENT_CELL', value: 'PLACEMENT_CELL'},
-        {label: 'EXAM_CELL', value: 'EXAM_CELL'}
+        {label: 'EXAM_CELL', value: 'EXAM_CELL'},
+        {label: "CULTURAL_CELL", value: "CULTURAL_CELL"},
+        {label: "SPORTS_CELL", value: "SPORTS_CELL"},
+        {label: "NSS_CELL", value: "NSS_CELL"},
+        {label: "MAR_CELL", value: "MAR_CELL"},
     ]
 
     const statusColor = {

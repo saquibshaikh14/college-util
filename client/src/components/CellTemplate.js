@@ -23,6 +23,8 @@ export default function CellTemplate({activeCell}) {
         cell: activeComponent.trim()
     });
 
+    const [showFile, setFileToShow] = useState(null);
+
     const [previewAvailable, setPreviewAvailable] = useState(false);
 
 
@@ -250,6 +252,7 @@ export default function CellTemplate({activeCell}) {
         }else
             setUploadForm({...uploadForm, [e.target.name]: e.target.value});
     }
+
     
      useEffect(() => {
         let componentStatus = {
@@ -279,7 +282,6 @@ export default function CellTemplate({activeCell}) {
             <AdminLoader />
         )
      
-
     return (
         <div>
            {showModal && (
@@ -324,6 +326,8 @@ export default function CellTemplate({activeCell}) {
             </div>)
             }
 
+            {showFile && (<ShowFileDescription showFile={showFile} getDate={getDate} setFileToShow={setFileToShow} />)}
+
             <Grid columns="three" style={{width: '85%', margin: "0 auto", marginBottom: "20px"}}>
                 <Grid.Column></Grid.Column>
                 <Grid.Column>
@@ -345,7 +349,7 @@ export default function CellTemplate({activeCell}) {
                     
                 </Card.Content>
                 <Card.Content>
-                    <Table basic='very' striped selectable>
+                    <Table basic='very' selectable singleLine fixed>
                         <Table.Header>
                             <Table.Row>
                                 <Table.HeaderCell>Title</Table.HeaderCell>
@@ -357,17 +361,16 @@ export default function CellTemplate({activeCell}) {
                         <Table.Body>
                             {
                                 fileList.map(file=>(
-                                    <Popup
-                                        trigger={
-                                            <Table.Row key={file._id} style={{cursor: "default"}}>
-                                        <Table.Cell>{file.title}</Table.Cell>
-                                        <Table.Cell>{file.description}</Table.Cell>
-                                        <Table.Cell>
+                                    
+                                    <Table.Row key={file._id} style={{cursor: "default"}}>
+                                        <Table.Cell onClick={()=>setFileToShow(file)} style={{cursor: 'pointer'}}>{file.title}</Table.Cell>
+                                        <Table.Cell onClick={()=>setFileToShow(file)} style={{cursor: 'pointer'}}>{file.description}</Table.Cell>
+                                        <Table.Cell onClick={()=>setFileToShow(file)} style={{cursor: 'pointer'}}>
                                             <div style={{maxWidth: "100%", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap"}}>
                                                 <b>Uploaded: </b>{getDate(file.createdAt)}
                                             </div>
                                             <div style={{maxWidth: "100%", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap"}}>
-                                                <b>{ file.uploadedBy.email}</b>
+                                                <b>{ file.uploadedBy?.email}</b>
                                             </div>
                                         </Table.Cell>
                                         <Table.Cell>
@@ -383,39 +386,6 @@ export default function CellTemplate({activeCell}) {
                                             
                                         </Table.Cell>
                                     </Table.Row>
-                                        }
-
-                                        position="top center"
-                                        flowing
-                                        on={"click"}
-
-                                        key={file._id}
-                                    >
-                                        <Popup.Header>{file.title}</Popup.Header>
-                                        <Popup.Content>
-
-                                            <Table>
-                                                <Table.Body>
-                                                <Table.Row>
-                                                    <Table.Cell>File Type</Table.Cell>
-                                                    <Table.Cell>{file.file_mimetype}</Table.Cell>
-                                                </Table.Row>
-                                                <Table.Row>
-                                                    <Table.Cell>Uploaded On</Table.Cell>
-                                                    <Table.Cell>{getDate(file.createdAt)}</Table.Cell>
-                                                </Table.Row>
-                                                <Table.Row>
-                                                    <Table.Cell>Uploaded By</Table.Cell>
-                                                    <Table.Cell>{file.uploadedBy.email}</Table.Cell>
-                                                </Table.Row>
-                                                <Table.Row>
-                                                    <Table.Cell>Updated On</Table.Cell>
-                                                    <Table.Cell>{getDate(file.updatedAt)}</Table.Cell>
-                                                </Table.Row>
-                                                </Table.Body>
-                                            </Table>
-                                        </Popup.Content>
-                                    </Popup>
                                 ))
                             }
                            
@@ -424,6 +394,84 @@ export default function CellTemplate({activeCell}) {
                     </Table>
                 </Card.Content>
             </Card>
+        </div>
+    )
+}
+
+const overflowTextStyle = {
+    overflowWrap: 'break-word', wordWrap: 'break-word', hyphens: 'auto'
+}
+
+
+function ShowFileDescription({showFile, getDate, setFileToShow}) {
+
+    return(
+        <div className="modal-filedesc-container">
+            <div className="modal-filedesc">
+                <div style={{textAlign: 'right'}}>
+                    <span className="filedesc-close-modal" onClick={()=>setFileToShow(null)}>X</span>
+                </div>
+                <h4 style={{...overflowTextStyle, textAlign: 'center'}}>{showFile.title}</h4>
+                {/* <Grid celled>
+                <Grid.Row>
+                    <Grid.Column width={3}>
+                        
+                    </Grid.Column>
+                    <Grid.Column width={13}>
+                        
+                    </Grid.Column>
+                    </Grid.Row>
+                </Grid> */}
+                <Table celled>
+                    <Table.Body>
+                        <Table.Row>
+                            <Table.Cell singleLine>
+                                Uploaded By
+                            </Table.Cell>
+                            <Table.Cell>
+                                {showFile.uploadedBy?.email}
+                            </Table.Cell>
+                        </Table.Row>
+
+                        <Table.Row>
+                            <Table.Cell singleLine>
+                                Uploaded On
+                            </Table.Cell>
+                            <Table.Cell>
+                                {getDate(showFile.createdAt)}
+                            </Table.Cell>
+                        </Table.Row>
+
+                        <Table.Row>
+                            <Table.Cell singleLine>
+                                File Type
+                            </Table.Cell>
+                            <Table.Cell>
+                                {showFile.file_mimetype}
+                            </Table.Cell>
+                        </Table.Row>
+
+                        <Table.Row>
+                            <Table.Cell singleLine>
+                                Uploaded Under
+                            </Table.Cell>
+                            <Table.Cell>
+                                {showFile.uploadedUnder}
+                            </Table.Cell>
+                        </Table.Row>
+
+                        <Table.Row>
+                            <Table.Cell singleLine>
+                               File Description
+                            </Table.Cell>
+                            <Table.Cell>
+                                {showFile.description}
+                            </Table.Cell>
+                        </Table.Row>
+
+                    </Table.Body>
+                </Table>
+            </div>
         </div>
     )
 }

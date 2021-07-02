@@ -12,6 +12,15 @@ export default function Default() {
     const [disabledButton, setDisabledButton] = useState(false);
 
 
+    const getDay = (createdAt) =>{
+        let dt = ((new Date() - new Date(createdAt))/864e5|0)
+        if(dt)
+            return dt + 'days ago';
+        else
+        return 'Today'
+    }
+
+
     const getRecentFiles = async ( reqFile, componentStatus) =>{
         try{  
             const {data} = await axios.get('http://localhost:5000/files/getrecentfiles/'+ reqFile, {withCredentials: true});
@@ -164,17 +173,17 @@ export default function Default() {
                                     <Card fluid key={file._id}>
                                         <Card.Content>
                                             <Card.Header>
-                                                {file.title}
+                                                {file.title.length > 30 ? file.title.substring(0, 30) + '...' : file.title}
                                             </Card.Header>
                                             <Card.Meta>
-                                                <i><b>By </b>{ file.uploadedBy?.email}</i> <small>10 days ago</small>
+                                                <i><b>By </b>{ file.uploadedBy?.email}</i> <small>{getDay(file.ctreatedAt)}</small>
                                             </Card.Meta>
                                             <Card.Meta>{file.uploadedUnder}</Card.Meta>
                                             <Card.Description>
-                                                {file.description}
+                                                {file.description.length > 40 ? file.description.substring(0, 44) + '...' : file.description}
                                             </Card.Description>
                                         </Card.Content>
-                                        <div class="ui bottom attached button" onClick={()=>downloadFile(file._id, file.title, file.file_path)}>
+                                        <div class="ui bottom attached button primary" onClick={()=>downloadFile(file._id, file.title, file.file_path)}>
                                             <i class="download icon"></i>
                                             Download
                                         </div>
@@ -200,22 +209,22 @@ export default function Default() {
                                     <Card fluid key={file._id}>
                                         <Card.Content>
                                             <Card.Header>
-                                                {file.title}
+                                                {file.title.length > 40 ? file.title.substring(0, 45) + '...' : file.title}
                                             </Card.Header>
                                             <Card.Meta>
-                                                <i><b>By </b>{file.uploadedBy?.email}</i> <small>10 days ago</small>
+                                                <i><b>By </b>{file.uploadedBy?.email}</i> <small>{((new Date() - new Date(file.createdAt))/864e5|0) + ' days ago'}</small>
                                             </Card.Meta>
                                             <Card.Meta>{file.uploadedUnder}</Card.Meta>
                                             <Card.Description>
-                                                {file.description}
+                                                {file.description.length > 50 ? file.description.substring(0, 65) + '...' : file.description}
                                             </Card.Description>
                                         </Card.Content>
                                         <div class="ui two buttons attached">
-                                            <div class="ui bottom attached button" onClick={()=>downloadFile(file._id, file.title, file.file_path)}>
+                                            <div class="ui bottom attached button primary" onClick={()=>downloadFile(file._id, file.title, file.file_path)}>
                                                 <i class="download icon"></i>
                                                 Download
                                             </div>
-                                            <div class="ui bottom attached button" onClick={(e)=>deleteFile(file._id)}>
+                                            <div class="ui bottom attached button negative" onClick={(e)=>deleteFile(file._id)}>
                                                 <i class="remove icon"></i>
                                                 Delete
                                             </div>
