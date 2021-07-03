@@ -26,7 +26,7 @@ router.get('/getfiles/:cell', async(req, res)=>{
             return res.json({message: "Unauthorized Access", response_status: 1001});
         
         
-        const filesList = await File.find({uploadedUnder: cell}).populate('uploadedBy','email');
+        const filesList = await File.find({uploadedUnder: cell}).sort({_id: -1}).populate('uploadedBy','email');
 
         await delay(1500);
 
@@ -85,11 +85,11 @@ router.post('/uploadfile', upload.single('file'),async(req, res)=>{
             uploadedBy: user._id
         });
         const savedFile = await file.save();
-        savedFile.uploadedBy = {_id: user._id, email: user.email};
+        //savedFile.uploadedBy = {_id: user._id, email: user.email};
+        //console.log(savedFile)
 
         await delay(500);
-
-        return res.json({response_status: 1000, response_data: savedFile});
+        return res.json({response_status: 1000, response_data: {...savedFile.toJSON(), uploadedBy: {_id: user._id, email: user.email}}});
     }catch(err){
         console.log(err.message);
         res.json({message: err.message, response_status: 1002});
@@ -170,11 +170,11 @@ router.get('/getrecentfiles/:requestType', async(req,res)=>{
         if(requestType === 'all'){
             const accesibleCell = req.user.role;
         
-            const filesList = await File.find({uploadedUnder: accesibleCell}).limit(15).populate('uploadedBy','email');
+            const filesList = await File.find({uploadedUnder: accesibleCell}).sort({_id: -1}).limit(15).populate('uploadedBy','email');
             await delay(1500);
             return res.json({response_status: 1000, response_data: filesList})
         }else if(requestType === 'myRecent'){
-            const filesList = await File.find({uploadedBy: user._id}).limit(10).populate('uploadedBy', 'email');
+            const filesList = await File.find({uploadedBy: user._id}).sort({_id: -1}).limit(10).populate('uploadedBy', 'email');
             await delay(1500);
             return res.json({response_status: 1000, response_data: filesList}) 
         }else{
