@@ -23,10 +23,11 @@
     background-color: #3c4b64;
 }
 
-.sidebar-logo{
+.sidebar-logo>.logo-link{
     background-color: rgba(0, 0, 21, 0.2);
     display: flex;
-    flex: 0 0 56px;
+    /* flex: 0 0 56px; */
+    height: 56px;
     align-items: center;
     justify-content: center;
     margin: 0;

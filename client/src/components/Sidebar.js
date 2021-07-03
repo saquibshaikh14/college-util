@@ -1,6 +1,7 @@
 import React from 'react';
 import {Icon} from 'semantic-ui-react';
 import {Link} from 'react-router-dom';
+import Logo from '../resources/logo.png';
 
 export default function Sidebar({activeNav, baseUrl, roles}) {
     //console.log(roles)
@@ -11,8 +12,8 @@ export default function Sidebar({activeNav, baseUrl, roles}) {
     return (
         <div className="sidebar">
             <h3 className="sidebar-logo">
-            <Link to={"/" + baseUrl + "/dashboard"} style={{color: "#fff"}}>
-                        STCET
+            <Link to={"/" + baseUrl + "/dashboard"} style={{color: "#fff"}} className="logo-link">
+                        <img src={Logo} alt="LOGO" style={{height: 30, marginRight: '10px'}} />STCET
                     </Link>
             </h3>
             <ul className="sidebar-navigations">

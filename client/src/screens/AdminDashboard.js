@@ -131,6 +131,10 @@ export default function AdminDashboard() {
                                             <Icon name="user circle" size="small" />
                                             Profile
                                         </div> */}
+                                        <div role="button" className="header-dropdown-item" onClick={()=>window.location.href = 'https://morning-escarpment-67980.herokuapp.com'}>
+                                            <Icon name="video camera" size="small" />
+                                            Video Call
+                                        </div>
                                         <div role="button" className="header-dropdown-item" onClick={logoutUser}>
                                             <Icon name="log out" size="small" />
                                             Logout
