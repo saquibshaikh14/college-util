@@ -15,14 +15,14 @@ Authentication system using express, passport (local strategy)
 
 ### response_status
 (login/signup)
-1000 - successful
-1001 - invalid credential
-503 - server error
+- 1000 - successful
+- 1001 - invalid credential
+- 503 - server error
 
-### Technologies Used
+## Technologies Used
 This application was developed using NodeJs with express for routing. MongoDB was used as database.The frontend was built with the react framework.
 
-### Installation
+## Installation
 * Clone the project repository.
 * Run git clone https://github.com/saquibshaikh14/college-util.
 * Run 'cd college-util' in the terminal.
