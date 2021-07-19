@@ -37,6 +37,10 @@ In the /client folder, run
   npm install
   npm start
 ```
+Run update command to get all the updated dependencies.
+```bash
+npm update
+```
 npm install will load /node_modules.
 
 
