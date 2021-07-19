@@ -28,12 +28,12 @@ The frontend was built with the react framework.
 * Run git clone https://github.com/saquibshaikh14/college-util.
 * Run 'cd college-util' in the terminal.
 * Run the following command in the /backend folder to install all dependencies
-```
+```bash
 npm install
 npm start
 ```
 In the /client folder, run
-```
+```bash
   npm install
   npm start
 ```
